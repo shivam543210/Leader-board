@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model User {
+  user_id String @id @default(cuid())
+  name    String
+  email   String @unique
+  password String
+ 
+
+  submissions  Submission[]
+  leaderboards Leaderboard[]
+}
+
+model Contest {
+  contest_id String @id @default(cuid())
+  title      String
+  start_time DateTime
+  end_time   DateTime
+
+  problems     Problem[]
+  submissions  Submission[]
+  leaderboards Leaderboard[]
+  result       Result?
+}
+
+model Problem {
+  problem_id  String @id @default(cuid())
+  contest_id  String
+  description String
+  max_score   Int @default(0)
+  max_time    Int @default(0)
+
+  contest     Contest     @relation(fields: [contest_id], references: [contest_id])
+  submissions Submission[]
+}
+
+model Submission {
+  submission_id String @id @default(cuid())
+
+  user_id    String
+  problem_id String
+  contest_id String
+
+  score        Int
+  status       String
+  submitted_at DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [user_id])
+  contest Contest @relation(fields: [contest_id], references: [contest_id])
+  problem Problem @relation(fields: [problem_id], references: [problem_id])
+}
+
+model Leaderboard {
+  leaderboard_id String @id @default(cuid())
+
+  user_id    String
+  contest_id String
+
+  total_score Int @default(0)
+  rank        Int @default(0)
+
+  user    User    @relation(fields: [user_id], references: [user_id])
+  contest Contest @relation(fields: [contest_id], references: [contest_id])
+
+  @@unique([user_id, contest_id])
+}
+
+model Result {
+  result_id String @id @default(cuid())
+
+  contest_id   String @unique
+  published_at DateTime @default(now())
+
+  contest Contest @relation(fields: [contest_id], references: [contest_id])
+}
