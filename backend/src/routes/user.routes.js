@@ -1,8 +1,10 @@
 import express from "express"
 import { validate } from "../middlewares/requestValidator.js"
-import { registrationSchema } from "../validator/auth.validator.js"
+import { registrationSchema, LoginSchema } from "../validator/auth.validator.js"
 import { asyncHandler } from "../utils/response.js";
-import {createUser } from "../controllers/authFolder/Register.js"
+import {createUser , login} from "../controllers/authFolder/Register.js"
+
+
 const router = express.Router();
 
 router.post("/register",
@@ -10,4 +12,8 @@ router.post("/register",
     asyncHandler(createUser)
     
 )
+router.post("/login", 
+    validate(LoginSchema),
+    asyncHandler(login))
+
 export default router   
