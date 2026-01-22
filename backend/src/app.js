@@ -1,7 +1,7 @@
 import express from 'express';
 import {errorhandler} from './middlewares/error.middleware.js';
 import {prisma} from './config/prisma.js';
-import router from './routes/user.routes.js';
+import router from './routes/index.js';
 
 
 const app = express();

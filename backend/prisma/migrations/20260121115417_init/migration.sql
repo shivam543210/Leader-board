@@ -3,7 +3,7 @@ CREATE TABLE "User" (
     "user_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "image" TEXT,
+    "password" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("user_id")
 );
@@ -21,6 +21,8 @@ CREATE TABLE "Contest" (
 -- CreateTable
 CREATE TABLE "Problem" (
     "problem_id" TEXT NOT NULL,
+    "name" TEXT,
+    "Test" TEXT,
     "contest_id" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "max_score" INTEGER NOT NULL DEFAULT 0,
