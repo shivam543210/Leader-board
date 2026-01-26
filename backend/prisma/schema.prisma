@@ -19,8 +19,10 @@ model User {
   name    String
   email   String @unique
   password String
+  role String @default("USER") 
   submissions  Submission[]
   leaderboards Leaderboard[]
+  user ContestParticipant[]
 }
 
 model Contest {
@@ -28,13 +30,23 @@ model Contest {
   title      String
   start_time DateTime
   end_time   DateTime
+ date DateTime @default(now())
 
   problems     Problem[]
   submissions  Submission[]
   leaderboards Leaderboard[]
   result       Result?
+  participants ContestParticipant[]
 }
+model ContestParticipant{
+  user_id String
+  contest_id String
 
+  user User @relation(fields: [user_id], references: [user_id])
+  contest Contest @relation(fields: [contest_id], references: [contest_id])
+
+  @@unique([user_id,contest_id])
+}
 model Problem {
   problem_id  String @id @default(cuid())
   name String? 
