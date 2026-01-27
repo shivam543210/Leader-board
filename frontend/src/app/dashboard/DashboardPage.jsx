@@ -1,6 +1,6 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { Trophy, CheckCircle, Target, TrendingUp } from 'lucide-react';
+import { Trophy, CheckCircle, Target, TrendingUp, Flame } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import GlassPanel from '../../components/ui/GlassPanel';
 import ContestHistory from '../../components/dashboard/ContestHistory';
@@ -158,6 +158,21 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                 </div>
             </GlassPanel>
+
+             {/* Feature 26: Daily Challenge Card */}
+             <GlassPanel className="p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white border-none flex items-center justify-between">
+                <div>
+                     <div className="flex items-center gap-2 mb-1">
+                        <Flame size={18} className="fill-white animate-pulse" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-orange-100">Daily Challenge</span>
+                     </div>
+                     <h4 className="font-bold text-lg">Merge k Sorted Lists</h4>
+                     <p className="text-sm text-orange-100">Hard • +50 Points</p>
+                </div>
+                <button className="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg text-sm font-semibold transition-colors">
+                    Solve
+                </button>
+             </GlassPanel>
         </div>
       </div>
       

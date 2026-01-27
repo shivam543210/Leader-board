@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Button from '../ui/Button';
 import { Upload, Lock, FileText, AlertTriangle, Star } from 'lucide-react';
 import SubmissionList from './SubmissionList';
+import DiscussionBoard from './DiscussionBoard';
 
 const EditorialLockedState = () => (
     <div className="flex flex-col items-center justify-center h-64 text-center p-8 animate-in fade-in zoom-in-95 duration-300">
@@ -168,9 +169,7 @@ const ProblemView = ({ problem, contestStatus = 'active' }) => {
         )}
 
         {activeTab === 'discussion' && (
-             <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                <p>Discussion board coming soon.</p>
-            </div>
+             <DiscussionBoard />
         )}
 
         {activeTab === 'rules' && (

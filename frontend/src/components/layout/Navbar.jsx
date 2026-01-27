@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Moon, Sun, LogOut, LayoutDashboard, Repeat } from 'lucide-react';
+import { Moon, Sun, LogOut, LayoutDashboard, Repeat, Flame } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
@@ -37,6 +37,12 @@ const Navbar = () => {
             <button onClick={toggleTheme} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400 transition-colors" title="Toggle Theme">
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
+
+            {/* Feature 26: Daily Streak */}
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 rounded-full text-sm font-bold animate-in fade-in zoom-in duration-500">
+                <Flame size={16} className="fill-current" />
+                <span>12</span>
+            </div>
 
             {/* Notifications */}
             <NotificationDropdown />

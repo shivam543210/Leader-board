@@ -23,6 +23,16 @@ const LeaderboardTable = ({ leaderboard = [], loading }) => {
 
   return (
     <GlassPanel className="overflow-hidden">
+      {/* Feature 25: Social Filters */}
+      <div className="flex items-center gap-4 px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+        <span className="text-sm font-semibold text-gray-500">View:</span>
+        <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+             <button className="px-3 py-1 text-sm font-medium rounded-md bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white">Global</button>
+             <button className="px-3 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">Friends</button>
+             <button className="px-3 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">My Country</button>
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead className="bg-gray-50/50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 text-xs uppercase font-semibold">
