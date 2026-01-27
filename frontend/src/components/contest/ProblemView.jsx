@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '../ui/Button';
 import { Upload, Lock, FileText, AlertTriangle } from 'lucide-react';
 import SubmissionList from './SubmissionList';
