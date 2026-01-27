@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, RotateCcw, ChevronDown, CheckCircle, AlertTriangle, XCircle, Clock } from 'lucide-react';
+import { Play, RotateCcw, ChevronDown, CheckCircle, AlertTriangle, XCircle, Clock, Bug, FileJson } from 'lucide-react';
 import Button from '../ui/Button';
 
 const LANGUAGES = [
@@ -50,6 +50,13 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
         );
     };
 
+    const [activeTab, setActiveTab] = useState('testcase'); // 'testcase' | 'result'
+    const [customInput, setCustomInput] = useState('1 2 3\n4 5 6');
+
+    useEffect(() => {
+        if (verdict) setActiveTab('result');
+    }, [verdict]);
+
     return (
         <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800">
             {/* Toolbar */}
@@ -59,9 +66,6 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
                         {LANGUAGES.find(l => l.id === language)?.name}
                         <ChevronDown size={14} className="text-gray-400" />
                     </button>
-                    {/* Dropdown would go here, simplified for demo using native select opacity 0 overlay or custom popper. 
-                        For now just a native select on top for functionality. 
-                    */}
                     <select 
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
@@ -72,8 +76,33 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
                         ))}
                     </select>
                 </div>
+                
+                {/* Feature 23: Code Templates */}
+                <button 
+                    onClick={() => {
+                        const saved = localStorage.getItem(`template_${language}`);
+                        if (saved) {
+                            if (window.confirm('Load saved template? This will replace current code.')) {
+                                setCode(saved);
+                            }
+                        } else {
+                            localStorage.setItem(`template_${language}`, code);
+                            alert('Current code saved as default template for ' + language);
+                        }
+                    }}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                >
+                    <FileJson size={14} /> Templates
+                </button>
 
                 <div className="flex gap-2">
+                    <button 
+                         onClick={() => setActiveTab('debugger')}
+                         className="p-1.5 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
+                         title="Debug"
+                    >
+                        <Bug size={16} />
+                    </button>
                     <button 
                          onClick={() => setCode(CODE_TEMPLATES[language])}
                          className="p-1.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
@@ -85,7 +114,7 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
             </div>
 
             {/* Editor Area */}
-            <div className="flex-1 relative font-mono text-sm group">
+            <div className="flex-1 relative font-mono text-sm group border-b border-gray-200 dark:border-gray-800">
                 {/* Line Numbers */}
                 <div className="absolute left-0 top-0 bottom-0 w-12 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col items-end pt-4 pr-3 text-gray-400 select-none overflow-hidden text-xs">
                     {Array.from({ length: Math.max(lines, 20) }).map((_, i) => (
@@ -102,16 +131,90 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
                 />
             </div>
 
-            {/* Verdict Display */}
-            <div className="px-4 pt-2">
-                <VerdictBanner status={verdict} />
+            {/* Bottom Panel (Testcase/Result) */}
+            <div className={`flex flex-col bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${activeTab === 'debugger' ? 'h-64' : 'h-48'}`}>
+                <div className="flex border-b border-gray-200 dark:border-gray-800">
+                    <button 
+                        onClick={() => setActiveTab('testcase')}
+                        className={`px-4 py-2 text-xs font-medium border-b-2 transition-colors ${activeTab === 'testcase' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Testcase
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('result')}
+                        className={`px-4 py-2 text-xs font-medium border-b-2 transition-colors ${activeTab === 'result' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Result
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('debugger')}
+                        className={`px-4 py-2 text-xs font-medium border-b-2 transition-colors flex items-center gap-1 ${activeTab === 'debugger' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    >
+                        <Bug size={12} /> Debugger
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-auto p-4">
+                    {activeTab === 'testcase' && (
+                        <div className="space-y-2">
+                             <label className="text-xs font-bold text-gray-500 uppercase">Input</label>
+                             <textarea 
+                                value={customInput}
+                                onChange={(e) => setCustomInput(e.target.value)}
+                                className="w-full h-24 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                placeholder="Enter custom input here..."
+                             />
+                        </div>
+                    )}
+                    
+                    {activeTab === 'result' && (
+                        <div>
+                             {verdict ? (
+                                <VerdictBanner status={verdict} />
+                             ) : (
+                                <div className="text-sm text-gray-500 italic">Run code to see results</div>
+                             )}
+                        </div>
+                    )}
+
+                    {activeTab === 'debugger' && (
+                        <div className="grid grid-cols-2 gap-4 h-full">
+                            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                                <h4 className="text-xs font-bold text-gray-500 uppercase mb-2">Variables</h4>
+                                <table className="w-full text-xs text-left">
+                                    <thead>
+                                        <tr className="border-b dark:border-gray-700 text-gray-400">
+                                            <th className="pb-1">Name</th>
+                                            <th className="pb-1">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="font-mono">
+                                        <tr><td className="py-1 text-purple-600">i</td><td className="text-gray-700 dark:text-gray-300">0</td></tr>
+                                        <tr><td className="py-1 text-purple-600">nums</td><td className="text-gray-700 dark:text-gray-300">[2, 7, 11, 15]</td></tr>
+                                        <tr><td className="py-1 text-purple-600">target</td><td className="text-gray-700 dark:text-gray-300">9</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                                <h4 className="text-xs font-bold text-gray-500 uppercase mb-2">Call Stack</h4>
+                                <div className="space-y-1 text-xs font-mono">
+                                    <div className="bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 px-2 py-1 rounded">twoSum (line 12)</div>
+                                    <div className="text-gray-500 px-2">main (line 24)</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Actions */}
             <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3 bg-gray-50/30 dark:bg-gray-800/10">
                 <Button 
                     variant="secondary" 
-                    onClick={() => onRun(code)}
+                    onClick={() => {
+                        setActiveTab('result');
+                        onRun(code, customInput);
+                    }}
                     disabled={isSubmitting}
                     className="!py-2"
                 >
