@@ -56,96 +56,108 @@ const Dashboard = () => {
         <p className="text-gray-500 dark:text-gray-400 mt-2">Welcome back, {user?.username || 'Guest'}!</p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-            title="Total Contests" 
-            value={MOCK_STATS.totalContests} 
-            icon={Trophy} 
-            color="bg-gradient-to-br from-purple-500 to-indigo-600" 
-        />
-        <StatCard 
-            title="Problems Solved" 
-            value={MOCK_STATS.problemsSolved} 
-            icon={CheckCircle} 
-            color="bg-gradient-to-br from-green-400 to-emerald-600" 
-        />
-        <StatCard 
-            title="Current Rank" 
-            value={MOCK_STATS.currentRank} 
-            icon={Target} 
-            color="bg-gradient-to-br from-blue-400 to-cyan-600" 
-        />
-        <StatCard 
-            title="Max Rating" 
-            value={MOCK_STATS.maxRating} 
-            icon={TrendingUp} 
-            color="bg-gradient-to-br from-orange-400 to-pink-600" 
-        />
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Rating Graph */}
-        <GlassPanel className="lg:col-span-2 p-6">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Rating Progress</h3>
-            <div className="h-[300px] w-full">
+         {/* Main Chart - Dominates Space */}
+         <GlassPanel className="lg:col-span-2 p-6 h-[450px]">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Rating History</h3>
+                <div className="flex gap-2">
+                    <span className="text-sm font-medium text-gray-500">Max: <span className="text-gray-900 dark:text-white">{MOCK_STATS.maxRating}</span></span>
+                </div>
+            </div>
+            <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={MOCK_RATING_DATA}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" className="dark:stroke-gray-800" />
                         <XAxis 
                             dataKey="contest" 
-                            stroke="#6b7280" 
-                            tick={{ fill: '#6b7280' }}
+                            stroke="#9ca3af" 
+                            tick={{ fill: '#9ca3af', fontSize: 12 }}
                             tickLine={false}
+                            axisLine={false}
                         />
                         <YAxis 
-                            stroke="#6b7280" 
-                            tick={{ fill: '#6b7280' }}
+                            stroke="#9ca3af" 
+                            tick={{ fill: '#9ca3af', fontSize: 12 }}
                             tickLine={false}
+                            axisLine={false}
                             domain={['dataMin - 100', 'dataMax + 100']}
                         />
                         <Tooltip 
                             contentStyle={{ 
                                 backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                                borderRadius: '12px',
-                                border: 'none',
+                                borderRadius: '8px',
+                                border: '1px solid #e5e7eb',
                                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                             }}
                         />
                         <Line 
                             type="monotone" 
                             dataKey="rating" 
-                            stroke="#3b82f6" 
+                            stroke="#2563eb" 
                             strokeWidth={3}
-                            dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }}
-                            activeDot={{ r: 6 }}
+                            dot={{ r: 4, fill: '#2563eb', strokeWidth: 2, stroke: '#fff' }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
                         />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
         </GlassPanel>
 
-        {/* Skill Radar */}
-        <GlassPanel className="p-6">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Skill Analysis</h3>
-            <div className="h-[300px] w-full flex items-center justify-center">
-                 <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={SKILL_DATA}>
-                    <PolarGrid stroke="#e5e7eb" className="dark:stroke-gray-700" />
-                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#6b7280', fontSize: 12 }} />
-                    <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
-                    <Radar
-                        name="Mike"
-                        dataKey="A"
-                        stroke="#3b82f6"
-                        strokeWidth={2}
-                        fill="#3b82f6"
-                        fillOpacity={0.3}
-                    />
-                    </RadarChart>
-                </ResponsiveContainer>
+        {/* Secondary Stats Column */}
+        <div className="space-y-6">
+             {/* Rank Card - Highlighted */}
+            <GlassPanel className="p-6 bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-none">
+                <div className="flex justify-between items-start mb-4">
+                    <div>
+                        <p className="text-blue-100 font-medium">Global Rank</p>
+                        <h3 className="text-4xl font-bold mt-1">#{MOCK_STATS.currentRank}</h3>
+                    </div>
+                    <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                        <Target size={24} className="text-white" />
+                    </div>
+                </div>
+                <div className="text-sm text-blue-100">
+                    Top 5% of users
+                </div>
+            </GlassPanel>
+
+            {/* Other Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+                 <GlassPanel className="p-4 flex flex-col items-center justify-center text-center">
+                    <Trophy size={20} className="text-orange-500 mb-2" />
+                    <span className="text-2xl font-bold text-gray-900 dark:text-white">{MOCK_STATS.totalContests}</span>
+                    <span className="text-xs text-gray-500">Contests</span>
+                 </GlassPanel>
+                 
+                 <GlassPanel className="p-4 flex flex-col items-center justify-center text-center">
+                    <CheckCircle size={20} className="text-green-500 mb-2" />
+                    <span className="text-2xl font-bold text-gray-900 dark:text-white">{MOCK_STATS.problemsSolved}</span>
+                    <span className="text-xs text-gray-500">Solved</span>
+                 </GlassPanel>
             </div>
-        </GlassPanel>
+
+            {/* Skill Radar Small */}
+            <GlassPanel className="p-4 h-[200px]">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 ml-1">Skill Breakdown</h4>
+                <div className="h-[150px] w-full -ml-4">
+                     <ResponsiveContainer width="100%" height="100%">
+                        <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SKILL_DATA}>
+                        <PolarGrid stroke="#e5e7eb" className="dark:stroke-gray-700" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#6b7280', fontSize: 10 }} />
+                        <Radar
+                            name="Skills"
+                            dataKey="A"
+                            stroke="#3b82f6"
+                            strokeWidth={2}
+                            fill="#3b82f6"
+                            fillOpacity={0.4}
+                        />
+                        </RadarChart>
+                    </ResponsiveContainer>
+                </div>
+            </GlassPanel>
+        </div>
       </div>
     </div>
   );

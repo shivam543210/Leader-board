@@ -43,10 +43,19 @@ const LeaderboardTable = ({ leaderboard = [], loading }) => {
                   `}
                 >
                   <td className="p-4 text-center font-bold text-gray-700 dark:text-gray-300">
-                    {entry.rank === 1 && <Medal size={20} className="text-yellow-500 mx-auto" />}
-                    {entry.rank === 2 && <Medal size={20} className="text-gray-400 mx-auto" />}
-                    {entry.rank === 3 && <Medal size={20} className="text-amber-600 mx-auto" />}
-                    {entry.rank > 3 && `#${entry.rank}`}
+                    <div className="flex flex-col items-center">
+                        {entry.rank === 1 && <Medal size={20} className="text-yellow-500" />}
+                        {entry.rank === 2 && <Medal size={20} className="text-gray-400" />}
+                        {entry.rank === 3 && <Medal size={20} className="text-amber-600" />}
+                        {entry.rank > 3 && `#${entry.rank}`}
+                        
+                        {/* Rank Delta */}
+                        {entry.change !== 0 && (
+                            <span className={`text-[10px] flex items-center ${entry.change > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {entry.change > 0 ? '▲' : '▼'} {Math.abs(entry.change)}
+                            </span>
+                        )}
+                    </div>
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-3">

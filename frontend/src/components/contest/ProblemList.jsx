@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, Circle, Lock } from 'lucide-react';
+import { CheckCircle, Circle, Lock, Clock } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -36,11 +36,10 @@ const ProblemList = ({ problems, activeProblemId, onSelectProblem }) => {
                 <span className={clsx("font-medium", isActive ? "text-blue-700 dark:text-blue-400" : "text-gray-900 dark:text-gray-200")}>
                   {index + 1}. {problem.title}
                 </span>
-                {problem.status === 'solved' ? (
-                  <CheckCircle size={16} className="text-green-500 mt-1 shrink-0" />
-                ) : (
-                  <Circle size={16} className="text-gray-300 dark:text-gray-600 mt-1 shrink-0" />
-                )}
+                {problem.status === 'solved' && <CheckCircle size={16} className="text-green-500 mt-1 shrink-0" />}
+                {problem.status === 'attempted' && <Clock size={16} className="text-amber-500 mt-1 shrink-0" />}
+                {problem.status === 'locked' && <Lock size={16} className="text-gray-400 mt-1 shrink-0" />}
+                {!problem.status && <Circle size={16} className="text-gray-300 dark:text-gray-600 mt-1 shrink-0" />}
               </div>
               <div className="flex items-center gap-2">
                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getDifficultyColor(problem.difficulty)}`}>

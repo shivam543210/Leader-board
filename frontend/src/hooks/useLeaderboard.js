@@ -20,7 +20,8 @@ const useLeaderboard = (contestId) => {
     // Simulate ranking changes
     const data = MOCK_LEADERBOARD_DATA.map(u => ({
         ...u,
-        score: u.score + (Math.random() > 0.8 ? 10 : 0) // Randomly increase score
+        score: u.score + (Math.random() > 0.8 ? 10 : 0), // Randomly increase score
+        change: Math.random() > 0.7 ? (Math.random() > 0.5 ? 1 : -1) : 0 // Randomly change rank direction
     })).sort((a, b) => b.score - a.score).map((u, i) => ({ ...u, rank: i + 1 }));
 
     setLeaderboard(data);
