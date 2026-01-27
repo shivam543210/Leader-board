@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Clock } from 'lucide-react';
-import ProblemList from '../components/specific/ProblemList';
-import ProblemView from '../components/specific/ProblemView';
+import ProblemList from '../../components/contest/ProblemList';
+import ProblemView from '../../components/contest/ProblemView';
 
 const MOCK_PROBLEMS = [
   {

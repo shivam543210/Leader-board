@@ -1,60 +1,29 @@
-import React, { useState } from 'react';
-import ContestCard from '../components/specific/ContestCard';
-import { Search } from 'lucide-react';
-import Input from '../components/common/Input';
-
-const MOCK_CONTESTS = [
-  {
-    id: 1,
-    title: "Weekly Contest 401",
-    start_time: "2026-02-01T10:00:00Z",
-    duration: 5400, // 90 mins
-    status: "upcoming"
-  },
-  {
-    id: 2,
-    title: "Bi-Weekly Contest 120",
-    start_time: "2026-01-28T14:00:00Z",
-    duration: 5400, 
-    status: "ongoing"
-  },
-  {
-    id: 3,
-    title: "Beginner Friendly Round #5",
-    start_time: "2026-01-25T09:00:00Z",
-    duration: 7200, 
-    status: "ended"
-  },
-  {
-      id: 4,
-      title: "Advanced Algorithm Challenge",
-      start_time: "2026-01-20T18:00:00Z",
-      duration: 10800,
-      status: "ended"
-  },
-  {
-      id: 5,
-      title: "Weekly Contest 402",
-      start_time: "2026-02-08T10:00:00Z",
-      duration: 5400,
-      status: "upcoming"
-  }
-];
+import React, { useState, useEffect } from 'react';
+import ContestCard from '../../components/contest/ContestCard';
+import { Search, Loader2 } from 'lucide-react';
+import Input from '../../components/ui/Input';
+import GlassPanel from '../../components/ui/GlassPanel';
+import useContest from '../../hooks/useContest';
 
 const Contests = () => {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const { contests, loading, error, fetchContests } = useContest();
 
-  const filteredContests = MOCK_CONTESTS.filter(contest => {
-    const matchesFilter = filter === 'all' || contest.status === filter;
+  useEffect(() => {
+    fetchContests(filter);
+  }, [fetchContests, filter]);
+
+  const filteredContests = contests.filter(contest => {
+    // Client-side search (API could handle this in future)
     const matchesSearch = contest.title.toLowerCase().includes(search.toLowerCase());
-    return matchesFilter && matchesSearch;
+    return matchesSearch;
   });
 
   return (
     <div className="space-y-8">
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row gap-6 justify-between items-center bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800">
+      <GlassPanel className="flex flex-col md:flex-row gap-6 justify-between items-center p-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Contests</h1>
           <p className="text-gray-500 dark:text-gray-400">Join upcoming contests and compete with others</p>
@@ -89,10 +58,14 @@ const Contests = () => {
             />
           </div>
         </div>
-      </div>
+      </GlassPanel>
 
       {/* Grid */}
-      {filteredContests.length > 0 ? (
+      {loading ? (
+        <div className="flex justify-center py-20">
+            <Loader2 className="animate-spin text-blue-600" size={40} />
+        </div>
+      ) : filteredContests.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredContests.map(contest => (
               <ContestCard key={contest.id} contest={contest} />

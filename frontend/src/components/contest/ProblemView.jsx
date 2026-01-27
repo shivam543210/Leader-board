@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../common/Button';
+import Button from '../ui/Button';
 import { Upload } from 'lucide-react';
 
 const ProblemView = ({ problem }) => {

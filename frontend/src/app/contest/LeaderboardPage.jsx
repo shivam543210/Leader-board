@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Trophy } from 'lucide-react';
-import LeaderboardTable from '../components/specific/LeaderboardTable';
-import Button from '../components/common/Button';
+import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
+import Button from '../../components/ui/Button';
 
 // Mock Data Generator
 const generateMockLeaderboard = () => {

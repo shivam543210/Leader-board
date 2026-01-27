@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
+import { useAuth } from '../../context/AuthContext';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
 
 const Signup = () => {
   const [formData, setFormData] = useState({

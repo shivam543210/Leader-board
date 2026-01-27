@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Plus } from 'lucide-react';
-import Input from '../../components/common/Input';
-import Button from '../../components/common/Button';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
 
 const CreateContest = () => {
   const navigate = useNavigate();

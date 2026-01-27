@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash, Calendar, Users, Eye } from 'lucide-react';
-import Button from '../../components/common/Button';
+import Button from '../../components/ui/Button';
 
 // Mock Data
 const MOCK_ADMIN_CONTESTS = [

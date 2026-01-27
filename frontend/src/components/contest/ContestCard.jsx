@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Calendar, Trophy, ChevronRight } from 'lucide-react';
-import Button from '../common/Button';
+import Button from '../ui/Button';
 
 const ContestCard = ({ contest }) => {
   const { title, start_time, duration, status } = contest;

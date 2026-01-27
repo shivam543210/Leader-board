@@ -1,30 +1,51 @@
 import React, { createContext, useContext, useState } from 'react';
+import AuthService from '../services/auth.service';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   // Mock User for now, replace with API call later
+  // State
   const [user, setUser] = useState(null); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeMode, setActiveMode] = useState('user'); // 'user' | 'admin'
+  const [loading, setLoading] = useState(false);
 
   const login = async (email, password) => {
-    // TODO: Implement API call
-    console.log('Logging in', email, password);
-    // Mock success
-    const mockUser = { id: 1, username: 'testuser', role: 'admin' };
-    setUser(mockUser);
-    setIsAuthenticated(true);
-    // Default to user mode on login
-    setActiveMode('user');
+    setLoading(true);
+    try {
+        const response = await AuthService.login(email, password);
+        setUser(response.user);
+        setIsAuthenticated(true);
+        localStorage.setItem('token', response.token);
+        setActiveMode('user');
+        return true;
+    } catch (error) {
+        console.error("Login failed", error);
+        throw error;
+    } finally {
+        setLoading(false);
+    }
   };
 
   const signup = async (userData) => {
-    console.log('Signing up', userData);
-    // TODO: Implement API call
+    setLoading(true);
+    try {
+        const response = await AuthService.signup(userData);
+        setUser(response.user);
+        setIsAuthenticated(true);
+        localStorage.setItem('token', response.token);
+        return true;
+    } catch (error) {
+        console.error("Signup failed", error);
+        throw error;
+    } finally {
+        setLoading(false);
+    }
   };
 
   const logout = () => {
+    AuthService.logout();
     setUser(null);
     setIsAuthenticated(false);
     setActiveMode('user');
