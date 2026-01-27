@@ -1,7 +1,10 @@
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Medal } from 'lucide-react';
+import { Medal, HelpCircle } from 'lucide-react';
 import GlassPanel from '../ui/GlassPanel';
+import Tooltip from '../ui/Tooltip';
 
 const LeaderboardTable = ({ leaderboard = [], loading }) => {
   const { user } = useAuth();
@@ -64,7 +67,9 @@ const LeaderboardTable = ({ leaderboard = [], loading }) => {
                         {safeUsername.charAt(0).toUpperCase()}
                       </div>
                       <div className="font-medium text-gray-900 dark:text-white">
-                        {safeUsername}
+                        <Link to={`/user/${safeUsername}`} className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">
+                            {safeUsername}
+                        </Link>
                         {isCurrentUser && <span className="ml-2 text-xs text-blue-500 bg-blue-100 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">You</span>}
                       </div>
                       <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">

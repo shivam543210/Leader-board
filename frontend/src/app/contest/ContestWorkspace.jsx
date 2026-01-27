@@ -3,6 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Clock, Zap } from 'lucide-react';
 import ProblemList from '../../components/contest/ProblemList';
 import ProblemView from '../../components/contest/ProblemView';
+import CodeEditor from '../../components/contest/CodeEditor';
 
 const MOCK_PROBLEMS = [
   {
@@ -115,6 +116,32 @@ const ContestDetails = () => {
     return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  /* Editor Logic */
+  const [verdict, setVerdict] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleRun = (code) => {
+    setIsSubmitting(true);
+    setVerdict(null);
+    setTimeout(() => {
+        setIsSubmitting(false);
+        // Mock simple run output (no verdict, just success)
+        alert('Code executed successfully!\nOutput: Hello World');
+    }, 1000);
+  };
+
+  const handleSubmit = (code) => {
+    setIsSubmitting(true);
+    setVerdict(null);
+    setTimeout(() => {
+        setIsSubmitting(false);
+        // Mock Random Verdict
+        const verdicts = ['Accepted', 'Wrong Answer', 'Time Limit Exceeded', 'Compilation Error'];
+        const randomVerdict = verdicts[Math.floor(Math.random() * verdicts.length)];
+        setVerdict(randomVerdict);
+    }, 1500);
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-6rem)] -my-4 -mx-4 sm:mx-0 sm:my-0">
       {/* Contest Header Bar */}
@@ -148,12 +175,8 @@ const ContestDetails = () => {
 
       {/* Main Split Layout */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left: Problem List (Responsive: hidden on mobile if problem viewed?) -> For now usually stacked or collapsible. 
-            Let's keep specific mobile behavior simple: Side-by-side on desktop, Stacked on mobile but scrollable? 
-            Actually, commonly mobile views show list, then click to view detail. 
-            For desktop first requirement: Split pane.
-        */}
-        <div className="w-full md:w-1/3 lg:w-1/4 border-r border-gray-200 dark:border-gray-800 hidden md:block">
+        {/* Left: Problem List (Collapsible on Mobile) */}
+        <div className="w-full md:w-64 border-r border-gray-200 dark:border-gray-800 hidden md:block shrink-0">
             <ProblemList 
                 problems={MOCK_PROBLEMS} 
                 activeProblemId={activeProblemId} 
@@ -161,11 +184,21 @@ const ContestDetails = () => {
             />
         </div>
 
-        {/* Right: Problem View */}
-        <div className="flex-1 min-w-0 bg-gray-50 dark:bg-black/20">
+        {/* Center: Problem View */}
+        <div className="flex-1 min-w-0 bg-gray-50 dark:bg-black/20 overflow-hidden border-r border-gray-200 dark:border-gray-800">
             <ProblemView 
                 problem={activeProblem} 
                 contestStatus={isVirtual ? 'active' : 'ended'}
+            />
+        </div>
+
+        {/* Right: Code Editor */}
+        <div className="w-full lg:w-[45%] bg-white dark:bg-gray-900 hidden lg:block">
+            <CodeEditor 
+                onRun={handleRun}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+                verdict={verdict}
             />
         </div>
       </div>

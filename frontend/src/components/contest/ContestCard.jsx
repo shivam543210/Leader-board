@@ -1,10 +1,20 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, Calendar, Trophy, ChevronRight, PlayCircle } from 'lucide-react';
+import { Clock, Calendar, Trophy, ChevronRight, PlayCircle, CheckCircle } from 'lucide-react';
 import Button from '../ui/Button';
+import useContest from '../../hooks/useContest';
 
 const ContestCard = ({ contest }) => {
-  const { title, start_time, duration, status } = contest;
+  const { title, start_time, duration, status, id } = contest;
+  const { registerForContest, isRegistered } = useContest();
+  const registered = isRegistered(id);
+  const [registering, setRegistering] = React.useState(false);
+
+  const handleRegister = async () => {
+    setRegistering(true);
+    await registerForContest(id);
+    setRegistering(false);
+  };
 
   const formattedTime = useMemo(() => {
     return new Date(start_time).toLocaleString('en-US', {
@@ -66,14 +76,22 @@ const ContestCard = ({ contest }) => {
              </React.Fragment>
           ) : (
             <Button 
-                variant={status === 'upcoming' ? 'secondary' : 'primary'} 
-                className="w-full flex items-center justify-center gap-2"
-                disabled={status === 'upcoming'}
+                variant={status === 'upcoming' ? (registered ? 'outline' : 'secondary') : 'primary'} 
+                className={`w-full flex items-center justify-center gap-2 ${registered ? 'border-green-200 text-green-600 bg-green-50' : ''}`}
+                disabled={status === 'upcoming' && registered}
+                onClick={status === 'upcoming' && !registered ? handleRegister : undefined}
+                isLoading={registering}
             >
             {status === 'upcoming' ? (
-                <>
-                Register <ChevronRight size={16} />
-                </>
+                registered ? (
+                    <>
+                    <CheckCircle size={16} /> Registered
+                    </>
+                ) : (
+                    <>
+                    Register <ChevronRight size={16} />
+                    </>
+                )
             ) : (
                 <Link to={`/contest/${contest.id}`} className="flex items-center gap-2 w-full justify-center">
                 Join Contest <Trophy size={16} />

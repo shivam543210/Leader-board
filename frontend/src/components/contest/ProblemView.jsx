@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Button from '../ui/Button';
-import { Upload, Lock, FileText, AlertTriangle } from 'lucide-react';
+import { Upload, Lock, FileText, AlertTriangle, Star } from 'lucide-react';
 import SubmissionList from './SubmissionList';
 
 const EditorialLockedState = () => (
@@ -34,6 +34,7 @@ const EditorialContent = ({ content }) => (
 
 const ProblemView = ({ problem, contestStatus = 'active' }) => {
   const [activeTab, setActiveTab] = React.useState('description');
+  const [isStarred, setIsStarred] = React.useState(false);
 
   if (!problem) {
     return (
@@ -47,6 +48,7 @@ const ProblemView = ({ problem, contestStatus = 'active' }) => {
     { id: 'description', label: 'Description', icon: null },
     { id: 'submissions', label: 'Submissions', icon: null },
     { id: 'editorial', label: 'Editorial', icon: Lock }, // Icon only if locked? or always?
+    { id: 'rules', label: 'Rules', icon: null },
     { id: 'discussion', label: 'Discussion', icon: null }
   ];
 
@@ -92,6 +94,15 @@ const ProblemView = ({ problem, contestStatus = 'active' }) => {
                 <div className="mb-6 border-b border-gray-100 dark:border-gray-800 pb-6">
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-3">
                     {problem.title}
+                    <button 
+                        onClick={() => setIsStarred(!isStarred)} 
+                        className="focus:outline-none transition-transform active:scale-95"
+                    >
+                        <Star 
+                            size={24} 
+                            className={`${isStarred ? 'fill-yellow-400 text-yellow-500' : 'text-gray-300 hover:text-gray-400'}`} 
+                        />
+                    </button>
                     <span className="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full font-medium">
                         {problem.difficulty}
                     </span>
@@ -159,6 +170,18 @@ const ProblemView = ({ problem, contestStatus = 'active' }) => {
         {activeTab === 'discussion' && (
              <div className="flex flex-col items-center justify-center h-64 text-gray-500">
                 <p>Discussion board coming soon.</p>
+            </div>
+        )}
+
+        {activeTab === 'rules' && (
+            <div className="prose dark:prose-invert max-w-none animate-in fade-in duration-300">
+                <h2 className="text-xl font-bold mb-4">Contest Rules</h2>
+                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300 list-disc pl-5">
+                    <li><strong>Scoring:</strong> Higher score wins. Ties are broken by lower finish time.</li>
+                    <li><strong>Penalties:</strong> +5 minutes for each wrong submission on a solved problem.</li>
+                    <li><strong>Plagiarism:</strong> Copying code is strictly prohibited and will result in disqualification.</li>
+                    <li><strong>Timeline:</strong> Problems must be submitted within the contest duration.</li>
+                </ul>
             </div>
         )}
       </div>

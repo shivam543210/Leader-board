@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/ui/Input';
@@ -12,12 +12,16 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/');
+      // Replace history entry to avoid back-button loop
+      navigate(from, { replace: true });
     } catch (error) {
       console.error('Login failed', error);
     } finally {

@@ -12,6 +12,9 @@ import DashboardPage from './app/dashboard/DashboardPage';
 import AdminDashboard from './app/admin/AdminDashboard';
 import AdminContests from './app/admin/AdminContests';
 import CreateContestWizard from './app/admin/CreateContestWizard';
+import UserProfile from './app/user/UserProfile';
+import ProblemSet from './app/problems/ProblemSet';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import GlobalAnnouncer from './components/common/GlobalAnnouncer';
 
 // Placeholder Pages
@@ -29,12 +32,14 @@ function App() {
               <Route path="/contests" element={<ContestList />} />
               <Route path="/contest/:contestId" element={<ContestWorkspace />} />
               <Route path="/contest/:contestId/leaderboard" element={<LeaderboardPage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+              <Route path="/problems" element={<ProblemSet />} />
+              <Route path="/user/:username" element={<UserProfile />} />
               
               {/* Admin Routes */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/contests" element={<AdminContests />} />
-              <Route path="/admin/create-contest" element={<CreateContestWizard />} />
+              <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/contests" element={<ProtectedRoute requireAdmin><AdminContests /></ProtectedRoute>} />
+              <Route path="/admin/create-contest" element={<ProtectedRoute requireAdmin><CreateContestWizard /></ProtectedRoute>} />
               
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />

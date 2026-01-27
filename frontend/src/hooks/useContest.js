@@ -40,13 +40,32 @@ const useContest = (contestId = null) => {
     }
   }, [contestId, fetchContestDetails]);
 
+  // Registration Mock Logic
+  const [registeredContests, setRegisteredContests] = useState(new Set());
+
+  const registerForContest = (id) => {
+    setLoading(true);
+    // Mock API call
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            setRegisteredContests(prev => new Set(prev).add(id));
+            setLoading(false);
+            resolve(true);
+        }, 1000);
+    });
+  };
+
+  const isRegistered = (id) => registeredContests.has(id);
+
   return {
     contests,
     currentContest,
     loading,
     error,
     fetchContests,
-    fetchContestDetails
+    fetchContestDetails,
+    registerForContest,
+    isRegistered
   };
 };
 
