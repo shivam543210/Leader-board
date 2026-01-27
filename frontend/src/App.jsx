@@ -11,7 +11,7 @@ import LeaderboardPage from './app/contest/LeaderboardPage';
 import DashboardPage from './app/dashboard/DashboardPage';
 import AdminDashboard from './app/admin/AdminDashboard';
 import AdminContests from './app/admin/AdminContests';
-import CreateContest from './app/admin/CreateContest';
+import CreateContestWizard from './app/admin/CreateContestWizard';
 
 // Placeholder Pages
 const Home = () => <Navigate to="/contests" replace />;
@@ -32,7 +32,7 @@ function App() {
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/contests" element={<AdminContests />} />
-              <Route path="/admin/create-contest" element={<CreateContest />} />
+              <Route path="/admin/create-contest" element={<CreateContestWizard />} />
               
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
