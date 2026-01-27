@@ -136,6 +136,19 @@ const Dashboard = () => {
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">{MOCK_STATS.problemsSolved}</span>
                     <span className="text-xs text-gray-500">Solved</span>
                  </GlassPanel>
+
+                 {/* Feature 28: Rating Predictor */}
+                 <GlassPanel className="col-span-2 p-4 flex flex-col items-center justify-center text-center bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800">
+                    <div className="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400">
+                        <TrendingUp size={18} />
+                        <span className="text-xs font-bold uppercase tracking-wider">Rating Predictor</span>
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                         <span className="text-2xl font-bold text-gray-900 dark:text-white">1735</span>
+                         <span className="text-sm font-medium text-emerald-500">+85</span>
+                    </div>
+                    <span className="text-xs text-gray-500 mt-1">Forecast for next contest</span>
+                 </GlassPanel>
             </div>
 
             {/* Skill Radar Small */}

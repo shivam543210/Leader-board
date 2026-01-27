@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { User, MapPin, Calendar, Award, Code, Trophy } from 'lucide-react';
+import { User, MapPin, Calendar, Award, Code, Trophy, Zap, Star, Shield } from 'lucide-react';
 import GlassPanel from '../../components/ui/GlassPanel';
 import ContestHistory from '../../components/dashboard/ContestHistory'; 
 
@@ -73,6 +73,28 @@ const UserProfile = () => {
             </div>
         </div>
       </GlassPanel>
+
+
+
+      {/* Feature 27: Gamification (Badges) */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+            { name: 'Algorithm Master', icon: Zap, color: 'text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30', desc: 'Solved 100+ Algo problems' },
+            { name: 'Contest Veteran', icon: Shield, color: 'text-blue-500 bg-blue-100 dark:bg-blue-900/30', desc: 'Participated in 50 contests' },
+            { name: 'Problem Solver', icon: Code, color: 'text-green-500 bg-green-100 dark:bg-green-900/30', desc: 'Daily streak of 30 days' },
+            { name: 'Top Rated', icon: Star, color: 'text-purple-500 bg-purple-100 dark:bg-purple-900/30', desc: 'Reached 1600+ rating' },
+        ].map((badge) => (
+            <GlassPanel key={badge.name} className="p-4 flex items-center gap-4 hover:scale-105 transition-transform cursor-pointer">
+                <div className={`p-3 rounded-full ${badge.color}`}>
+                    <badge.icon size={24} />
+                </div>
+                <div>
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-white">{badge.name}</h4>
+                    <p className="text-xs text-gray-500">{badge.desc}</p>
+                </div>
+            </GlassPanel>
+        ))}
+      </div>
 
       {/* Recent Activity */}
       <ContestHistory />

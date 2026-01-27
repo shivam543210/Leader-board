@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, RotateCcw, ChevronDown, CheckCircle, AlertTriangle, XCircle, Clock, Bug, FileJson } from 'lucide-react';
+import { Play, RotateCcw, ChevronDown, CheckCircle, AlertTriangle, XCircle, Clock, Bug, FileJson, Palette } from 'lucide-react';
 import Button from '../ui/Button';
 
 const LANGUAGES = [
@@ -52,29 +52,56 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
 
     const [activeTab, setActiveTab] = useState('testcase'); // 'testcase' | 'result'
     const [customInput, setCustomInput] = useState('1 2 3\n4 5 6');
+    const [theme, setTheme] = useState('default'); // 'default' | 'monokai' | 'dracula'
+
+    const THEMES = {
+        default: 'text-gray-800 dark:text-gray-200 bg-transparent',
+        monokai: 'text-[#f8f8f2] bg-[#272822]',
+        dracula: 'text-[#f8f8f2] bg-[#282a36]',
+        github: 'text-[#24292e] bg-white'
+    };
 
     useEffect(() => {
         if (verdict) setActiveTab('result');
     }, [verdict]);
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800">
+        <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 transition-colors">
             {/* Toolbar */}
             <div className="flex items-center justify-between p-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/20">
-                <div className="relative group">
-                    <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        {LANGUAGES.find(l => l.id === language)?.name}
-                        <ChevronDown size={14} className="text-gray-400" />
-                    </button>
-                    <select 
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                    >
-                        {LANGUAGES.map(lang => (
-                            <option key={lang.id} value={lang.id}>{lang.name}</option>
-                        ))}
-                    </select>
+                <div className="flex gap-2">
+                    <div className="relative group">
+                        <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            {LANGUAGES.find(l => l.id === language)?.name}
+                            <ChevronDown size={14} className="text-gray-400" />
+                        </button>
+                        <select 
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value)}
+                            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        >
+                            {LANGUAGES.map(lang => (
+                                <option key={lang.id} value={lang.id}>{lang.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Feature 30: IDE Themes */}
+                    <div className="relative group">
+                         <button className="p-1.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors" title="Change Theme">
+                            <Palette size={16} />
+                         </button>
+                         <select 
+                            value={theme}
+                            onChange={(e) => setTheme(e.target.value)}
+                            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        >
+                            <option value="default">Default</option>
+                            <option value="monokai">Monokai</option>
+                            <option value="dracula">Dracula</option>
+                            <option value="github">GitHub Light</option>
+                        </select>
+                    </div>
                 </div>
                 
                 {/* Feature 23: Code Templates */}
@@ -114,9 +141,9 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
             </div>
 
             {/* Editor Area */}
-            <div className="flex-1 relative font-mono text-sm group border-b border-gray-200 dark:border-gray-800">
+            <div className={`flex-1 relative font-mono text-sm group border-b border-gray-200 dark:border-gray-800 ${theme !== 'default' ? THEMES[theme] : ''}`}>
                 {/* Line Numbers */}
-                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col items-end pt-4 pr-3 text-gray-400 select-none overflow-hidden text-xs">
+                <div className="absolute left-0 top-0 bottom-0 w-12 border-r border-gray-200 dark:border-gray-800 flex flex-col items-end pt-4 pr-3 text-gray-400 select-none overflow-hidden text-xs opacity-50">
                     {Array.from({ length: Math.max(lines, 20) }).map((_, i) => (
                         <div key={i} className="leading-6">{i + 1}</div>
                     ))}
@@ -127,7 +154,7 @@ const CodeEditor = ({ onRun, onSubmit, isSubmitting, verdict }) => {
                     value={code}
                     onChange={handleCodeChange}
                     spellCheck="false"
-                    className="absolute inset-0 pl-14 pt-4 pr-4 w-full h-full bg-transparent resize-none outline-none text-gray-800 dark:text-gray-200 leading-6"
+                    className={`absolute inset-0 pl-14 pt-4 pr-4 w-full h-full bg-transparent resize-none outline-none leading-6 ${theme === 'default' ? 'text-gray-800 dark:text-gray-200' : 'text-inherit'}`}
                 />
             </div>
 
