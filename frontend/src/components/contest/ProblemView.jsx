@@ -1,8 +1,38 @@
 import React from 'react';
 import Button from '../ui/Button';
-import { Upload } from 'lucide-react';
+import { Upload, Lock, FileText, AlertTriangle } from 'lucide-react';
+import SubmissionList from './SubmissionList';
 
-const ProblemView = ({ problem }) => {
+const EditorialLockedState = () => (
+    <div className="flex flex-col items-center justify-center h-64 text-center p-8 animate-in fade-in zoom-in-95 duration-300">
+        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-full mb-4">
+            <Lock size={32} className="text-gray-400" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Editorial Locked</h3>
+        <p className="text-gray-500 max-w-sm">
+            The solution will be available once the contest has ended. Keep trying!
+        </p>
+    </div>
+);
+
+const EditorialContent = ({ content }) => (
+    <div className="prose dark:prose-invert max-w-none animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg flex items-start gap-3 mb-6 border border-blue-100 dark:border-blue-800/50">
+            <AlertTriangle className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" size={20} />
+            <div className="text-sm text-blue-800 dark:text-blue-200">
+                <p className="font-semibold mb-1">Approach Hint</p>
+                <p>Try using Dynamic Programming with a sliding window optimization.</p>
+            </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Solution Approach</h3>
+        <div className="text-gray-600 dark:text-gray-300 whitespace-pre-line leading-relaxed">
+            {content || "Detailed solution explanation will appear here..."}
+        </div>
+    </div>
+);
+
+const ProblemView = ({ problem, contestStatus = 'active' }) => {
   const [activeTab, setActiveTab] = React.useState('description');
 
   if (!problem) {
@@ -14,10 +44,25 @@ const ProblemView = ({ problem }) => {
   }
 
   const tabs = [
-    { id: 'description', label: 'Description' },
-    { id: 'submissions', label: 'Submissions' },
-    { id: 'discussion', label: 'Discussion' }
+    { id: 'description', label: 'Description', icon: null },
+    { id: 'submissions', label: 'Submissions', icon: null },
+    { id: 'editorial', label: 'Editorial', icon: Lock }, // Icon only if locked? or always?
+    { id: 'discussion', label: 'Discussion', icon: null }
   ];
+
+  const handleSubmit = () => {
+    alert("Submitting solution... (Mock)");
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        handleSubmit();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="h-full flex flex-col bg-white dark:bg-gray-900">
@@ -27,12 +72,13 @@ const ProblemView = ({ problem }) => {
             <button
                key={tab.id}
                onClick={() => setActiveTab(tab.id)}
-               className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                  activeTab === tab.id 
                    ? 'border-blue-600 text-blue-600 dark:text-blue-400' 
                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
             >
+              {tab.id === 'editorial' && contestStatus === 'active' && <Lock size={14} className="mb-0.5" />}
               {tab.label}
             </button>
           ))}
@@ -93,7 +139,7 @@ const ProblemView = ({ problem }) => {
 
                 {/* Action Footer */}
                 <div className="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800">
-                    <Button variant="primary" className="flex items-center gap-2">
+                    <Button variant="primary" className="flex items-center gap-2" onClick={handleSubmit}>
                         <Upload size={18} /> Submit Solution
                     </Button>
                 </div>
@@ -101,9 +147,13 @@ const ProblemView = ({ problem }) => {
         )}
         
         {activeTab === 'submissions' && (
-            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                <p>No submissions yet.</p>
-            </div>
+            <SubmissionList />
+        )}
+        
+        {activeTab === 'editorial' && (
+             contestStatus === 'active' 
+                ? <EditorialLockedState />
+                : <EditorialContent content={problem.editorial} />
         )}
 
         {activeTab === 'discussion' && (

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, Calendar, Trophy, ChevronRight } from 'lucide-react';
+import { Clock, Calendar, Trophy, ChevronRight, PlayCircle } from 'lucide-react';
 import Button from '../ui/Button';
 
 const ContestCard = ({ contest }) => {
@@ -52,24 +52,35 @@ const ContestCard = ({ contest }) => {
           </div>
         </div>
 
-        <div className="mt-6">
-          <Button 
-            variant={status === 'ended' ? 'secondary' : 'primary'} 
-            className="w-full flex items-center justify-center gap-2"
-            disabled={status === 'upcoming'}
-          >
-           {status === 'upcoming' ? (
-              <>
-               Register <ChevronRight size={16} />
-              </>
-           ) : status === 'ongoing' ? (
-              <Link to={`/contest/${contest.id}`} className="flex items-center gap-2 w-full justify-center">
-               Join Contest <Trophy size={16} />
-              </Link>
-           ) : (
-             'View Results'
-           )}
-          </Button>
+        <div className="mt-6 flex flex-col gap-3">
+          {status === 'ended' ? (
+             <React.Fragment>
+                <Link to={`/contest/${contest.id}?mode=virtual`}>
+                    <Button variant="outline" className="w-full flex items-center justify-center gap-2 border-blue-200 dark:border-blue-900 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                        <PlayCircle size={16} /> Virtual Contest
+                    </Button>
+                </Link>
+                <Link to={`/contest/${contest.id}/leaderboard`} className="text-center text-xs text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 underline decoration-dotted">
+                    View Leaderboard
+                </Link>
+             </React.Fragment>
+          ) : (
+            <Button 
+                variant={status === 'upcoming' ? 'secondary' : 'primary'} 
+                className="w-full flex items-center justify-center gap-2"
+                disabled={status === 'upcoming'}
+            >
+            {status === 'upcoming' ? (
+                <>
+                Register <ChevronRight size={16} />
+                </>
+            ) : (
+                <Link to={`/contest/${contest.id}`} className="flex items-center gap-2 w-full justify-center">
+                Join Contest <Trophy size={16} />
+                </Link>
+            )}
+            </Button>
+          )}
         </div>
       </div>
     </div>

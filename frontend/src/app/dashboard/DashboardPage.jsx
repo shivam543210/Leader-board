@@ -3,6 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Trophy, CheckCircle, Target, TrendingUp } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import GlassPanel from '../../components/ui/GlassPanel';
+import ContestHistory from '../../components/dashboard/ContestHistory';
 
 // Mock Data
 const MOCK_STATS = {
@@ -159,6 +160,9 @@ const Dashboard = () => {
             </GlassPanel>
         </div>
       </div>
+      
+      {/* Contest History Full Width */}
+      <ContestHistory />
     </div>
   );
 };

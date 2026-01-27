@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Clock } from 'lucide-react';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Clock, Zap } from 'lucide-react';
 import ProblemList from '../../components/contest/ProblemList';
 import ProblemView from '../../components/contest/ProblemView';
 
@@ -26,7 +26,7 @@ const MOCK_PROBLEMS = [
     title: "Longest Substring Without Repeating Characters",
     difficulty: "Medium",
     points: 4,
-    status: "unsolved",
+    status: "attempted",
     timeLimit: "2s",
     memoryLimit: "512MB",
     description: "Given a string `s`, find the length of the longest substring without repeating characters.",
@@ -71,20 +71,44 @@ const MOCK_PROBLEMS = [
 
 const ContestDetails = () => {
   const { contestId } = useParams();
+  const [searchParams] = useSearchParams();
+  const isVirtual = searchParams.get('mode') === 'virtual';
+  
   const [activeProblemId, setActiveProblemId] = useState(MOCK_PROBLEMS[0].id);
-  const [timeLeft, setTimeLeft] = useState(5400); // 90 minutes in seconds
-
+  const [timeLeft, setTimeLeft] = useState(isVirtual ? 5400 : 0); // 90 mins for virtual, 0 for normal review
+  
   const activeProblem = MOCK_PROBLEMS.find(p => p.id === activeProblemId);
 
-  // Mock Timer
+  // Timer Logic
   useEffect(() => {
+    if (!isVirtual) return;
+    
     const timer = setInterval(() => {
         setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isVirtual]);
+
+  // Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        
+        if (e.key === 'n') {
+            const idx = MOCK_PROBLEMS.findIndex(p => p.id === activeProblemId);
+            if (idx < MOCK_PROBLEMS.length - 1) setActiveProblemId(MOCK_PROBLEMS[idx+1].id);
+        }
+        if (e.key === 'p') {
+            const idx = MOCK_PROBLEMS.findIndex(p => p.id === activeProblemId);
+            if (idx > 0) setActiveProblemId(MOCK_PROBLEMS[idx-1].id);
+        }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeProblemId]);
 
   const formatTime = (seconds) => {
+    if (seconds <= 0) return "Ended";
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
@@ -99,14 +123,21 @@ const ContestDetails = () => {
             <Link to="/contests" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-500">
                 <ArrowLeft size={20} />
             </Link>
-            <h2 className="font-bold text-gray-900 dark:text-white truncate max-w-[200px] sm:max-w-md">
-                Weekly Contest #{contestId}
-            </h2>
+            <div>
+                <h2 className="font-bold text-gray-900 dark:text-white truncate max-w-[200px] sm:max-w-md flex items-center gap-2">
+                    Weekly Contest #{contestId}
+                    {isVirtual && (
+                        <span className="text-xs px-2 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-full border border-purple-200 dark:border-purple-800 flex items-center gap-1">
+                            <Zap size={10} fill="currentColor" /> Virtual
+                        </span>
+                    )}
+                </h2>
+            </div>
         </div>
         
         <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg font-mono text-lg font-medium text-gray-900 dark:text-gray-100">
-                <Clock size={18} className="text-gray-500" />
+            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-mono text-lg font-medium ${isVirtual ? 'bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' : 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'}`}>
+                <Clock size={18} className={isVirtual ? 'text-purple-500' : 'text-gray-500'} />
                 {formatTime(timeLeft)}
             </div>
              <Link to={`/contest/${contestId}/leaderboard`} className="hidden sm:block text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
@@ -132,7 +163,10 @@ const ContestDetails = () => {
 
         {/* Right: Problem View */}
         <div className="flex-1 min-w-0 bg-gray-50 dark:bg-black/20">
-            <ProblemView problem={activeProblem} />
+            <ProblemView 
+                problem={activeProblem} 
+                contestStatus={isVirtual ? 'active' : 'ended'}
+            />
         </div>
       </div>
     </div>

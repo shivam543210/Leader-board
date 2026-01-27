@@ -12,6 +12,7 @@ import DashboardPage from './app/dashboard/DashboardPage';
 import AdminDashboard from './app/admin/AdminDashboard';
 import AdminContests from './app/admin/AdminContests';
 import CreateContestWizard from './app/admin/CreateContestWizard';
+import GlobalAnnouncer from './components/common/GlobalAnnouncer';
 
 // Placeholder Pages
 const Home = () => <Navigate to="/contests" replace />;
@@ -21,6 +22,7 @@ function App() {
     <AuthProvider>
       <ThemeProvider>
         <Router>
+          <GlobalAnnouncer />
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />

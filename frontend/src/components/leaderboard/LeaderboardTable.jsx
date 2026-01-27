@@ -27,6 +27,7 @@ const LeaderboardTable = ({ leaderboard = [], loading }) => {
               <th className="p-4 w-16 text-center">Rank</th>
               <th className="p-4">User</th>
               <th className="p-4 text-center">Score</th>
+              <th className="p-4 text-center">Penalty</th>
               <th className="p-4 text-right">Finish Time</th>
             </tr>
           </thead>
@@ -73,6 +74,13 @@ const LeaderboardTable = ({ leaderboard = [], loading }) => {
                   </td>
                   <td className="p-4 text-center font-mono font-bold text-blue-600 dark:text-blue-400">
                     {entry.score}
+                  </td>
+                  <td className="p-4 text-center font-mono text-sm text-gray-600 dark:text-gray-400">
+                    {entry.penalty > 0 ? (
+                        <span className="text-red-500 font-bold">+{entry.penalty}</span>
+                    ) : (
+                        <span className="text-gray-300 dark:text-gray-700">-</span>
+                    )}
                   </td>
                   <td className="p-4 text-right text-sm text-gray-500 dark:text-gray-400 font-mono">
                     {entry.finish_time}
