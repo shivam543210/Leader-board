@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Moon, Sun, LogOut, LayoutDashboard, Repeat } from 'lucide-react';
+import { Moon, Sun, LogOut, LayoutDashboard, Repeat } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import NotificationDropdown from './NotificationDropdown';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -38,10 +39,7 @@ const Navbar = () => {
             </button>
 
             {/* Notifications */}
-            <button className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400 transition-colors">
-                <Bell size={20} />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-            </button>
+            <NotificationDropdown />
 
             {/* Profile Dropdown */}
             <div className="relative group">
