@@ -1,5 +1,6 @@
 import {asyncHandler, successResponse} from "../../utils/response.js"
 import {createUser as createUserService,createLoginService} from "../../services/user.service.js"
+import {sendWelcomeEmail} from "../../services/email.Service.js"
 import {generateToken} from "../../utils/jwt.js"
 const registerUser = async(req,res)=>{
     const user = await createUserService(req.body);
@@ -7,8 +8,9 @@ const registerUser = async(req,res)=>{
     const token = generateToken({ userId: user.user_id});
     const {password,...rest} = user;
     rest.token = token;
+    sendWelcomeEmail(user);
+    successResponse(res,200,"User created successfullly",rest)    
 
-    successResponse(res,200,"User created successfullly",rest)      
     
 }
 const loginUser = async function loginUser(req,res){

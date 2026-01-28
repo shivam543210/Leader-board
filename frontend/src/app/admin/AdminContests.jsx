@@ -70,6 +70,9 @@ const AdminContests = () => {
                     <button className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg">
                       <Eye size={18} />
                     </button>
+                    <Link to={`/admin/contests/${contest.id}/analytics`} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg" title="Analytics">
+                      <TrendingUp size={18} />
+                    </Link>
                     <button className="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg">
                       <Edit size={18} />
                     </button>

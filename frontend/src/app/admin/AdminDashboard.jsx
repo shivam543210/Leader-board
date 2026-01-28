@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, FileCode, CheckCircle, TrendingUp } from 'lucide-react';
+import { Users, FileCode, CheckCircle, TrendingUp, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -13,43 +13,50 @@ const AdminDashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Metric 1: Total Users */}
         <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center justify-between">
             <div>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Total Users</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">8,542</h3>
             </div>
-            <div className="p-3 rounded-lg bg-blue-500">
-                <Users size={24} className="text-white" />
+            <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                <Users size={24} />
             </div>
         </div>
 
+        {/* Metric 2: Active Contests */}
         <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center justify-between">
             <div>
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Total Contests</p>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">124</h3>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Active Contents</p>
+                <div className="flex items-baseline gap-2">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">3</h3>
+                    <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">LIVE</span>
+                </div>
             </div>
-            <div className="p-3 rounded-lg bg-purple-500">
-                <TrendingUp size={24} className="text-white" />
+            <div className="p-3 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                <TrendingUp size={24} />
             </div>
         </div>
 
+        {/* Metric 3: Concurrent Users */}
         <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center justify-between">
             <div>
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Problems</p>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">2,403</h3>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Concurrent Users</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">1,204</h3>
             </div>
-            <div className="p-3 rounded-lg bg-orange-500">
-                <FileCode size={24} className="text-white" />
+            <div className="p-3 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+                <Activity size={24} />
             </div>
         </div>
 
+        {/* Metric 4: Submission Rate */}
         <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center justify-between">
             <div>
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Submissions</p>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">1.2M</h3>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Submissions / min</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">342</h3>
             </div>
-            <div className="p-3 rounded-lg bg-green-500">
-                <CheckCircle size={24} className="text-white" />
+            <div className="p-3 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                <FileCode size={24} />
             </div>
         </div>
       </div>
