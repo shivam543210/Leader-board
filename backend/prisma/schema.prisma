@@ -65,7 +65,8 @@ model Submission {
   user_id    String
   problem_id String
   contest_id String
-
+  language   String
+  code       String
   score        Int
   status       String
   submitted_at DateTime @default(now())
