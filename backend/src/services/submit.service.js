@@ -9,14 +9,18 @@ async function submitService(data){
             user_id,    
             problem_id,
             contest_id,
-            score,
-            status:"PENDING",
+            language,
             code,
-            language
+            score,  
+            status:"PENDING",
+            
         }
     })
   await submissionQueue.add("executeSession",{
     submission: submission.submission_id
+  },{
+    attempts:3,
+    backoff:50000
   })
     return submission
 }
