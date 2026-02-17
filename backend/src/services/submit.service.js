@@ -1,8 +1,19 @@
 import {prisma} from "../config/prisma.js";
 import { submissionQueue } from "../queue/submission.queue.js";
 
+async function addTOqueue(id){
+  console.log("id",id)
+   await submissionQueue.add("executeSession",{
+    submission_id:id
+   },{
+    attempts:3,
+    backoff:50000
+   })
+   console.log("Job added to queue")
+}
 async function submitService(data){
     const {user_id,problem_id,contest_id,score,status,code,language} = data;
+    console.log(data);
 
     const submission = await prisma.submission.create({
         data:{
@@ -13,15 +24,11 @@ async function submitService(data){
             code,
             score,  
             status:"PENDING",
-            
+
         }
     })
-  await submissionQueue.add("executeSession",{
-    submission: submission.submission_id
-  },{
-    attempts:3,
-    backoff:50000
-  })
+  await addTOqueue(submission.submission_id)
+
     return submission
 }
 

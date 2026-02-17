@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "leaderboard-api-collection",
+		"name": "Leaderboard API",
+		"description": "Complete API collection for the Leader-board backend project.\n\nBase URL: http://localhost:9000/api/v1\n\n## Flow:\n1. Register a user\n2. Login\n3. Create a contest\n4. Add problems to the contest\n5. Submit a solution\n6. Check the leaderboard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:9000/api/v1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"description": "User registration and login endpoints",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Shivam Kumar\",\n    \"email\": \"shivam@example.com\",\n    \"password\": \"Pass@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["register"]
+						},
+						"description": "Register a new user.\n\nRequired fields:\n- name (string)\n- email (string, unique)\n- password (string)"
+					},
+					"response": []
+				},
+				{
+					"name": "Register User 2 (for testing)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Rahul Sharma\",\n    \"email\": \"rahul@example.com\",\n    \"password\": \"Test@5678\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["register"]
+						},
+						"description": "Register a second user for testing submissions and leaderboard."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"shivam@example.com\",\n    \"password\": \"Pass@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["login"]
+						},
+						"description": "Login with existing user credentials.\n\nRequired fields:\n- email (string)\n- password (string)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contest",
+			"description": "Contest management endpoints",
+			"item": [
+				{
+					"name": "Create Contest",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Weekly Coding Challenge #1\",\n    \"start_time\": \"2026-02-17T10:00:00.000Z\",\n    \"end_time\": \"2026-02-17T12:00:00.000Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contests",
+							"host": ["{{baseUrl}}"],
+							"path": ["contests"]
+						},
+						"description": "Create a new contest.\n\nRequired fields:\n- title (string)\n\nOptional fields:\n- start_time (date ISO string)\n- end_time (date ISO string)\n\n⚠️ Save the `contest_id` from the response — you'll need it for creating problems and submissions."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contest 2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"DSA Sprint Challenge\",\n    \"start_time\": \"2026-02-20T14:00:00.000Z\",\n    \"end_time\": \"2026-02-20T17:00:00.000Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contests",
+							"host": ["{{baseUrl}}"],
+							"path": ["contests"]
+						},
+						"description": "Create a second contest for testing."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Problem",
+			"description": "Problem creation endpoints (single and bulk)",
+			"item": [
+				{
+					"name": "Create Single Problem",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Two Sum\",\n    \"Test\": \"Input: [2,7,11,15], target=9 | Output: [0,1]\",\n    \"contest_id\": \"PASTE_CONTEST_ID_HERE\",\n    \"description\": \"Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution.\",\n    \"max_score\": 100,\n    \"max_time\": 2000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/problem",
+							"host": ["{{baseUrl}}"],
+							"path": ["problem"]
+						},
+						"description": "Create a single problem for a contest.\n\nRequired fields:\n- contest_id (string) — from Create Contest response\n- description (string)\n- max_score (number)\n- max_time (number, in ms)\n\nOptional fields:\n- name (string)\n- Test (string)\n\n⚠️ Replace `PASTE_CONTEST_ID_HERE` with an actual contest_id."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Multiple Problems (Bulk)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contest_id\": \"PASTE_CONTEST_ID_HERE\",\n    \"problems\": [\n        {\n            \"name\": \"Reverse String\",\n            \"Test\": \"Input: 'hello' | Output: 'olleh'\",\n            \"description\": \"Write a function that reverses a string. The input string is given as an array of characters.\",\n            \"max_score\": 50,\n            \"max_time\": 1000\n        },\n        {\n            \"name\": \"Palindrome Check\",\n            \"Test\": \"Input: 'racecar' | Output: true\",\n            \"description\": \"Given a string, determine if it is a palindrome considering only alphanumeric characters and ignoring cases.\",\n            \"max_score\": 75,\n            \"max_time\": 1500\n        },\n        {\n            \"name\": \"FizzBuzz\",\n            \"Test\": \"Input: 15 | Output: [1,2,Fizz,4,Buzz,...,FizzBuzz]\",\n            \"description\": \"Write a program that outputs the string representation of numbers from 1 to n. For multiples of 3 print Fizz, multiples of 5 print Buzz, and multiples of both print FizzBuzz.\",\n            \"max_score\": 80,\n            \"max_time\": 1000\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/problems",
+							"host": ["{{baseUrl}}"],
+							"path": ["problems"]
+						},
+						"description": "Create multiple problems at once for a contest.\n\nRequired fields:\n- contest_id (string)\n- problems (array, min 1 item)\n  - Each problem needs: name, description, max_score, max_time\n  - Optional: Test\n\n⚠️ Replace `PASTE_CONTEST_ID_HERE` with an actual contest_id."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Submission",
+			"description": "Code submission endpoint",
+			"item": [
+				{
+					"name": "Submit Solution (C++)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"PASTE_USER_ID_HERE\",\n    \"problem_id\": \"PASTE_PROBLEM_ID_HERE\",\n    \"contest_id\": \"PASTE_CONTEST_ID_HERE\",\n    \"language\": \"cpp\",\n    \"code\": \"#include<iostream>\\nusing namespace std;\\nint main(){\\n    int a,b;\\n    cin>>a>>b;\\n    cout<<a+b;\\n    return 0;\\n}\",\n    \"score\": 100,\n    \"status\": \"Accepted\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/submit",
+							"host": ["{{baseUrl}}"],
+							"path": ["submit"]
+						},
+						"description": "Submit a code solution.\n\nRequired fields:\n- user_id (string)\n- problem_id (string)\n- contest_id (string)\n- language (string) — e.g. 'cpp', 'python', 'java', 'javascript'\n- code (string)\n- score (number)\n- status (string) — e.g. 'Accepted', 'Wrong Answer', 'TLE', 'Runtime Error'\n\n⚠️ Replace all PASTE_*_HERE with actual IDs from previous responses."
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Solution (Python)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"PASTE_USER_ID_HERE\",\n    \"problem_id\": \"PASTE_PROBLEM_ID_HERE\",\n    \"contest_id\": \"PASTE_CONTEST_ID_HERE\",\n    \"language\": \"python\",\n    \"code\": \"a, b = map(int, input().split())\\nprint(a + b)\",\n    \"score\": 85,\n    \"status\": \"Accepted\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/submit",
+							"host": ["{{baseUrl}}"],
+							"path": ["submit"]
+						},
+						"description": "Submit a Python solution for testing."
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Solution (Wrong Answer)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"PASTE_USER_ID_HERE\",\n    \"problem_id\": \"PASTE_PROBLEM_ID_HERE\",\n    \"contest_id\": \"PASTE_CONTEST_ID_HERE\",\n    \"language\": \"javascript\",\n    \"code\": \"const readline = require('readline');\\nconst rl = readline.createInterface({ input: process.stdin });\\nrl.on('line', (line) => { console.log('wrong'); });\",\n    \"score\": 0,\n    \"status\": \"Wrong Answer\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/submit",
+							"host": ["{{baseUrl}}"],
+							"path": ["submit"]
+						},
+						"description": "Test a Wrong Answer submission to see how the system handles failures."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leaderboard",
+			"description": "Leaderboard endpoint",
+			"item": [
+				{
+					"name": "Get Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": ["{{baseUrl}}"],
+							"path": [""]
+						},
+						"description": "Get the current leaderboard data.\n\nNo request body needed — just a simple GET request."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,5 +1,5 @@
 import { successResponse, errorResponse } from '../utils/response.js';
-import * as leaderboardService from '../services/leaderboard.service.js';
+
 
 export const getLeaderboard = async (req, res, next) => {
   try {

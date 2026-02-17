@@ -1,15 +1,13 @@
 import joi from "joi"
 
 const submitValidateSchema = joi.object({
-    user_id: joi.string().trim().required(),
-    problem_id: joi.string().trim().required(),
-    contest_id: joi.string().trim().required(),
-    score: joi.number().trim().required(),
-    status: joi.string().trim().required(),
-    
-    code: joi.string().trim().required(),
-    language: joi.string().trim().required(),
-    
+    user_id: joi.string().required(),
+    problem_id: joi.string().required(),
+    contest_id: joi.string().required(),
+    score: joi.number().required(),
+    status: joi.string().required(),
+    code: joi.string().required(),
+    language: joi.string().required(),
 })
 
 export {submitValidateSchema}

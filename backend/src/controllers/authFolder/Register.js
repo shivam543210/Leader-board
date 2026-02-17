@@ -9,7 +9,7 @@ const registerUser = async(req,res)=>{
     const {password,...rest} = user;
     rest.token = token;
     sendWelcomeEmail(user);
-    successResponse(res,200,"User created successfullly",rest)    
+    successResponse(res,200,"User created successfully",rest)    
 
     
 }
